@@ -127,12 +127,6 @@
     return newArr;
   };
 
-  /*
-   * TIP: map is really handy when you want to transform an array of
-   * values into a new array of values. _.pluck() is solved for you
-   * as an example of this.
-   */
-
   // Takes an array of objects and returns and array of the values of
   // a certain property in it. E.g. take an array of people and return
   // an array of just their ages
@@ -169,7 +163,7 @@
     accumulator = typeof accumulator === "undefined" ? collection.shift() : accumulator;
 
     _.each(collection, function(element) {
-      accumulator = iterator(accumulator,element)
+      accumulator = iterator(accumulator, element)
     })
 
     return accumulator;
@@ -191,12 +185,24 @@
   // Determine whether all of the elements match a truth test.
   _.every = function(collection, iterator) {
     // TIP: Try re-using reduce() here.
+    // Personal note: ternary syntax is nice and clean but don't use too often!
+    // Personal tip: double hashbang FTW!
+    return _.reduce(collection, function(wasFound, element) {
+      return !iterator ? !!element && wasFound : !!iterator(element) && wasFound;
+    }, true)
   };
 
   // Determine whether any of the elements pass a truth test. If no iterator is
   // provided, provide a default one
   _.some = function(collection, iterator) {
     // TIP: There's a very clever way to re-use every() here.
+    if(iterator === undefined){
+      iterator = _.identity;
+    };
+
+    return !_.every(collection, function(element){
+      return !iterator(element)
+    })
   };
 
 
